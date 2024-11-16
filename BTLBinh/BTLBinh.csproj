@@ -1,0 +1,418 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F3D1D8F3-AB14-4407-A402-D2B2873F2C8C}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>BTLBinh</RootNamespace>
+    <AssemblyName>BTLBinh</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1001\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1652.0\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1652.0\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1652.0\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1652.0\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1652.0\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class\BuyData.cs" />
+    <Compile Include="Class\SalesData.cs" />
+    <Compile Include="Class\User.cs" />
+    <Compile Include="Form\BankTransfer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\BankTransfer.Designer.cs">
+      <DependentUpon>BankTransfer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Cash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Cash.Designer.cs">
+      <DependentUpon>Cash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Form9.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Form9.Designer.cs">
+      <DependentUpon>Form9.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\HoaDon.cs" />
+    <Compile Include="Class\DataProcess.cs" />
+    <Compile Include="Form\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Form3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Form3.Designer.cs">
+      <DependentUpon>Form3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Form4.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Form4.Designer.cs">
+      <DependentUpon>Form4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Form5.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Form5.Designer.cs">
+      <DependentUpon>Form5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Form6.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Form6.Designer.cs">
+      <DependentUpon>Form6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Form7.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Form7.Designer.cs">
+      <DependentUpon>Form7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Form8.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Form8.Designer.cs">
+      <DependentUpon>Form8.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\MenuItems.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\MenuItems.Designer.cs">
+      <DependentUpon>MenuItems.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\OrderItem.cs" />
+    <Compile Include="Class\Password.cs" />
+    <Compile Include="Form\Payment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Payment.Designer.cs">
+      <DependentUpon>Payment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form\Order.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Order.Designer.cs">
+      <DependentUpon>Order.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Class\Function.cs" />
+    <Compile Include="Class\MenuStripHelper.cs" />
+    <Compile Include="Class\Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\RpHoaDonBan\FormReportHDB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report\RpHoaDonBan\FormReportHDB.Designer.cs">
+      <DependentUpon>FormReportHDB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Report\RpHoaDonNhap\FormReportHDN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report\RpHoaDonNhap\FormReportHDN.Designer.cs">
+      <DependentUpon>FormReportHDN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Report\RpNhaCungCap\FormReportNCC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report\RpNhaCungCap\FormReportNCC.Designer.cs">
+      <DependentUpon>FormReportNCC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="_BTL_LTTQDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_BTL_LTTQDataSet.xsd</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Form\BankTransfer.resx">
+      <DependentUpon>BankTransfer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Cash.resx">
+      <DependentUpon>Cash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Form3.resx">
+      <DependentUpon>Form3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Form4.resx">
+      <DependentUpon>Form4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Form5.resx">
+      <DependentUpon>Form5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Form6.resx">
+      <DependentUpon>Form6.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Form7.resx">
+      <DependentUpon>Form7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Form8.resx">
+      <DependentUpon>Form8.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Form9.resx">
+      <DependentUpon>Form9.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\MenuItems.resx">
+      <DependentUpon>MenuItems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Payment.resx">
+      <DependentUpon>Payment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\Order.resx">
+      <DependentUpon>Order.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\RpChiTietHoaDonBan\FormReportChiTietHDB.resx">
+      <DependentUpon>FormReportChiTietHDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\RpChiTietHoaDonBan\ChiTietHoaDonBan.rdlc" />
+    <EmbeddedResource Include="Report\RpChiTietHoaDonNhap\FormReportChiTietHDN.resx">
+      <DependentUpon>FormReportChiTietHDN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\RpChiTietHoaDonNhap\ChiTietHoaDonNhap.rdlc" />
+    <EmbeddedResource Include="Report\RpDanhMuc\DanhMuc.rdlc" />
+    <EmbeddedResource Include="Report\RpDanhMuc\FormReportDanhMuc.resx">
+      <DependentUpon>FormReportDanhMuc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\RpHoaDonBan\FormReportHDB.resx">
+      <DependentUpon>FormReportHDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\RpHoaDonBan\HoaDonBan.rdlc" />
+    <EmbeddedResource Include="Report\RpHoaDonNhap\FormReportHDN.resx">
+      <DependentUpon>FormReportHDN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\RpHoaDonNhap\HoaDonNhap.rdlc" />
+    <EmbeddedResource Include="Report\RpNhaCungCap\FormReportNCC.resx">
+      <DependentUpon>FormReportNCC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\RpNhaCungCap\NhaCungCap.rdlc" />
+    <EmbeddedResource Include="Report\RpNhanVien\FormReportNhanVien.resx">
+      <DependentUpon>FormReportNhanVien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\RpNhanVien\NhanVien.rdlc" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Report\RpChiTietHoaDonBan\FormReportChiTietHDB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report\RpChiTietHoaDonBan\FormReportChiTietHDB.Designer.cs">
+      <DependentUpon>FormReportChiTietHDB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Report\RpChiTietHoaDonNhap\FormReportChiTietHDN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report\RpChiTietHoaDonNhap\FormReportChiTietHDN.Designer.cs">
+      <DependentUpon>FormReportChiTietHDN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Report\RpDanhMuc\FormReportDanhMuc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report\RpDanhMuc\FormReportDanhMuc.Designer.cs">
+      <DependentUpon>FormReportDanhMuc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Report\RpNhanVien\FormReportNhanVien.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Report\RpNhanVien\FormReportNhanVien.Designer.cs">
+      <DependentUpon>FormReportNhanVien.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="_BTL_LTTQDataSet.xsc">
+      <DependentUpon>_BTL_LTTQDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="_BTL_LTTQDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>_BTL_LTTQDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="_BTL_LTTQDataSet.xss">
+      <DependentUpon>_BTL_LTTQDataSet.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Screenshot 2024-10-25 141816.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\nút thêm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\capheden.jpg" />
+    <None Include="Resources\banhmithit.jpg" />
+    <None Include="Resources\banhngotdau.jpg" />
+    <None Include="Resources\caphedaxay.jpg" />
+    <None Include="Resources\capheden1.jpg" />
+    <None Include="Resources\caphesua.jpg" />
+    <None Include="Resources\hamburger.jpg" />
+    <None Include="Resources\1k.jpeg" />
+    <None Include="Resources\2k.jpg" />
+    <None Include="Resources\5k.jpg" />
+    <None Include="Resources\10k.jpg" />
+    <None Include="Resources\20k.jpg" />
+    <None Include="Resources\50k.jpg" />
+    <None Include="Resources\100k.jpg" />
+    <None Include="Resources\200k.jpg" />
+    <None Include="Resources\500k.jpg" />
+    <Content Include="Resources\Image\banhmithit.jpg" />
+    <Content Include="Resources\Image\banhngotdau.jpg" />
+    <Content Include="Resources\Image\caphedaxay.jpg" />
+    <Content Include="Resources\Image\capheden.jpg" />
+    <Content Include="Resources\Image\caphesua.jpg" />
+    <Content Include="Resources\Image\hamburger.jpg" />
+    <Content Include="Resources\Image\kemdua.jpg" />
+    <Content Include="Resources\Image\nuoccamep.jpg" />
+    <Content Include="Resources\Image\nuoceptao.jpg" />
+    <Content Include="Resources\Image\pizzaphomai.jpg" />
+    <Content Include="Resources\Image\saladraucu.jpg" />
+    <Content Include="Resources\Image\sinhtodau.jpg" />
+    <Content Include="Resources\Image\sodachanh.jpg" />
+    <Content Include="Resources\Image\trasuachantrau.jpg" />
+    <Content Include="Resources\Image\trasuamatcha.jpg" />
+    <None Include="Resources\kemdua.jpg" />
+    <None Include="Resources\nuoccamep.jpg" />
+    <None Include="Resources\nuoceptao.jpg" />
+    <None Include="Resources\pizzaphomai.jpg" />
+    <None Include="Resources\saladraucu.jpg" />
+    <None Include="Resources\sinhtodau.jpg" />
+    <None Include="Resources\sodachanh.jpg" />
+    <None Include="Resources\trasuachantrau.jpg" />
+    <None Include="Resources\trasuamatcha.jpg" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\visa.png" />
+    <None Include="Resources\diskette.png" />
+    <None Include="Resources\feature-selection.png" />
+    <None Include="Resources\x-button.png" />
+    <None Include="Resources\check.png" />
+    <None Include="Resources\discount-voucher1.png" />
+    <None Include="Resources\customer-service.png" />
+    <None Include="Resources\file.png" />
+    <None Include="Resources\meticulous.png" />
+    <None Include="Resources\supplier.png" />
+    <None Include="Resources\schedule.png" />
+    <None Include="Resources\clothes.png" />
+    <None Include="Resources\bar-code %281%29.png" />
+    <None Include="Resources\bar-code.png" />
+    <None Include="Resources\promo.png" />
+    <None Include="Resources\tag %281%29.png" />
+    <None Include="Resources\loading-arrow.png" />
+    <None Include="Resources\report.png" />
+    <None Include="Resources\excel.png" />
+    <None Include="Resources\delete.png" />
+    <None Include="Resources\service.png" />
+    <None Include="Resources\plus.png" />
+    <None Include="Resources\tag.png" />
+    <None Include="Resources\money.png" />
+    <None Include="Resources\product.png" />
+    <None Include="Resources\overflow.png" />
+    <None Include="Resources\shipping-label.png" />
+    <None Include="Resources\coding.png" />
+    <None Include="Resources\discount-voucher.png" />
+    <None Include="Resources\log-in.png" />
+    <None Include="Resources\coffee-shop.png" />
+    <None Include="Resources\3d-lock.png" />
+    <Content Include="Resources\462535601_1597976264127211_349224676188851455_n.jpg" />
+    <Content Include="Resources\462581855_521093494077419_8968395065120325347_n.jpg" />
+    <None Include="Resources\profile.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
