@@ -110,7 +110,7 @@ namespace BTLBinh
         {
             Form1 form1 = new Form1();
             form1.Show();
-            //this.Hide();
+            this.Hide();
         }
 
         private void nhapHangToolStripMenuItem_Click(object sender, EventArgs e)
@@ -228,7 +228,7 @@ namespace BTLBinh
         {
             txtMaHoaDon.Text = hoaDon.MaHoaDon;
             txtMaNhanVien.Text = User.CurrentEmployeeId;
-            txtMaKhachHang.Text = hoaDon.MaKhachHang;
+            txtSoDienThoai.Text = hoaDon.SoDienThoai;
 
             dgv_hoaDon.Rows.Clear();  // Xóa tất cả các hàng hiện có trong DataGridView
 
@@ -243,18 +243,18 @@ namespace BTLBinh
         {
             hoaDon.MaHoaDon = txtMaHoaDon.Text;
             hoaDon.MaNhanVien = User.CurrentEmployeeId;
-            hoaDon.MaKhachHang = txtMaKhachHang.Text;
+            hoaDon.SoDienThoai = txtSoDienThoai.Text;
         }
 
         private void DeleteHoaDon(HoaDon hoaDon)
         {
             hoaDon.MaHoaDon = null;
             hoaDon.MaNhanVien = null;
-            hoaDon.MaKhachHang = null;
+            hoaDon.SoDienThoai = null;
 
             txtMaHoaDon.Text = "";
             txtMaNhanVien.Text = User.CurrentEmployeeId;
-            txtMaKhachHang.Text = "";
+            txtSoDienThoai.Text = "";
             SetupDataGridView();
         }
 
@@ -391,7 +391,7 @@ namespace BTLBinh
             var dataProcess = new DataProcess();
             string maHDB = txtMaHoaDon.Text;
             string maNV = txtMaNhanVien.Text;
-            string maKH = txtMaKhachHang.Text;
+            string soDienThoai = txtSoDienThoai.Text;
             decimal tongTien;
 
             // Kiểm tra và chuyển đổi giá trị từ TextBox tổng tiền
@@ -406,22 +406,44 @@ namespace BTLBinh
             {
                 connection.Open();
 
+                string maKH = "";
+
                 // Kiểm tra mã khách hàng và thêm địa chỉ nếu cần
-                string checkMaKHQuery = "SELECT COUNT(*) FROM KHACHHANG WHERE MaKH = @MaKH";
+                string checkMaKHQuery = "SELECT MaKH FROM KHACHHANG WHERE SDT = @SDT";
                 using (SqlCommand checkCmd = new SqlCommand(checkMaKHQuery, connection))
                 {
-                    checkCmd.Parameters.AddWithValue("@MaKH", maKH);
-                    int count = (int)checkCmd.ExecuteScalar();
+                    checkCmd.Parameters.AddWithValue("@SDT", soDienThoai);
+                    var result = checkCmd.ExecuteScalar();
 
-                    // Nếu mã khách hàng không tồn tại, thêm khách hàng mới với địa chỉ
-                    if (count == 0)
+                    if (result != null) // Nếu tìm thấy khách hàng
                     {
+                        maKH = result.ToString(); // Lấy mã khách hàng
+                    }
+                    else
+                    {
+                        // Thêm khách hàng mới nếu không tồn tại
+                        string getMaxMaKHQuery = "SELECT TOP 1 MaKH FROM KHACHHANG ORDER BY MaKH DESC";
+                        maKH = "KH001"; // Mã mặc định nếu chưa có khách hàng nào
+
+                        using (SqlCommand getMaxCmd = new SqlCommand(getMaxMaKHQuery, connection))
+                        {
+                            var maxResult = getMaxCmd.ExecuteScalar();
+                            if (maxResult != null)
+                            {
+                                string lastMaKH = maxResult.ToString();
+                                int numberPart = int.Parse(lastMaKH.Substring(2));
+                                maKH = "KH" + (numberPart + 1).ToString("D3");
+                            }
+                        }
+
+                        // Kiểm tra xem địa chỉ có được nhập không
                         if (!string.IsNullOrEmpty(diaChiKH))
                         {
-                            string insertKHQuery = "INSERT INTO KHACHHANG (MaKH, DiaChi) VALUES (@MaKH, @DiaChi)";
+                            string insertKHQuery = "INSERT INTO KHACHHANG (MaKH, SDT, DiaChi) VALUES (@MaKH, @SDT, @DiaChi)";
                             using (SqlCommand insertCmd = new SqlCommand(insertKHQuery, connection))
                             {
                                 insertCmd.Parameters.AddWithValue("@MaKH", maKH);
+                                insertCmd.Parameters.AddWithValue("@SDT", soDienThoai);
                                 insertCmd.Parameters.AddWithValue("@DiaChi", diaChiKH);
                                 insertCmd.ExecuteNonQuery();
                             }
@@ -433,6 +455,7 @@ namespace BTLBinh
                         }
                     }
                 }
+
 
                 SqlTransaction transaction = connection.BeginTransaction();
 
@@ -487,6 +510,7 @@ namespace BTLBinh
 
                     foreach (var item in chiTietHDB)
                     {
+                        // Thêm chi tiết hóa đơn vào bảng CHITIETHDB
                         string insertChiTietQuery = "INSERT INTO CHITIETHDB (MaHDB, MaSP, SoLuong, ThanhTien, KhuyenMai) " +
                                                     "VALUES (@MaHDB, @MaSP, @SoLuong, @ThanhTien, @KhuyenMai)";
                         using (SqlCommand cmd = new SqlCommand(insertChiTietQuery, connection, transaction))
@@ -498,7 +522,17 @@ namespace BTLBinh
                             cmd.Parameters.AddWithValue("@KhuyenMai", item.khuyenMai);
                             cmd.ExecuteNonQuery();
                         }
+
+                        // Trừ số lượng sản phẩm trong bảng SANPHAM
+                        string updateSanPhamQuery = "UPDATE SANPHAM SET SoLuong = SoLuong - @SoLuong WHERE MaSP = @MaSP";
+                        using (SqlCommand updateCmd = new SqlCommand(updateSanPhamQuery, connection, transaction))
+                        {
+                            updateCmd.Parameters.AddWithValue("@SoLuong", item.soLuong);
+                            updateCmd.Parameters.AddWithValue("@MaSP", item.maSP);
+                            updateCmd.ExecuteNonQuery();
+                        }
                     }
+
 
                     transaction.Commit();
                     MessageBox.Show("Thanh toán thành công!");
@@ -566,10 +600,8 @@ namespace BTLBinh
                 checkBan09 = false;
                 ResetButtonColor(btBan09);
             }
+            diaChiKH = "";
         }
-
-        
-
 
         private void menu_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -587,6 +619,31 @@ namespace BTLBinh
 
         }
 
+        private int GetAvailableProductQuantity(string productName)
+        {
+            // Truy vấn số lượng sản phẩm hiện có trong bảng SANPHAM
+            int availableQuantity = 0;
+            string query = "SELECT SoLuong FROM SANPHAM WHERE TenSP = @TenSP"; // Giả sử tên sản phẩm là TenSP trong bảng SANPHAM
+
+            using (SqlConnection connection = new SqlConnection(@"Data Source=DESKTOP-6C4ON0I\SQLEXPRESS;Initial Catalog=LTTQ;Integrated Security=True;"))
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@TenSP", productName);
+                    var result = command.ExecuteScalar();
+
+                    if (result != null)
+                    {
+                        availableQuantity = Convert.ToInt32(result);
+                    }
+                }
+            }
+
+            return availableQuantity;
+        }
+
+
         private void XuLyDanhSachTextBox()
         {
             if (ProductNames != null && ProductQuantities != null)
@@ -596,6 +653,14 @@ namespace BTLBinh
                     int quantity = ProductQuantities[i];
                     if (quantity > 0)
                     {
+                        // Kiểm tra số lượng sản phẩm trong bảng SANPHAM
+                        int availableQuantity = GetAvailableProductQuantity(ProductNames[i]);
+                        if (availableQuantity < quantity)
+                        {
+                            MessageBox.Show($"Sản phẩm '{ProductNames[i]}' không đủ số lượng. Số lượng còn lại: {availableQuantity}");
+                            return; // Nếu không đủ số lượng, thoát phương thức
+                        }
+
                         // Kiểm tra xem sản phẩm đã có trong DataGridView chưa
                         bool productExists = false;
                         foreach (DataGridViewRow row in dgv_hoaDon.Rows)
@@ -638,6 +703,7 @@ namespace BTLBinh
             }
         }
 
+
         // Hàm mở dialog để nhập địa chỉ khách hàng
         private void PromptForAddress()
         {
@@ -646,16 +712,16 @@ namespace BTLBinh
         }
 
 
-        private string kiemTraKhachHang(string maKH)
+        private string kiemTraKhachHang(string soDienThoai)
         {
 
             using (SqlConnection connection = new SqlConnection(@"Data Source=DESKTOP-6C4ON0I\SQLEXPRESS;Initial Catalog=LTTQ;Integrated Security=True;"))
             {
                 connection.Open();
-                string checkMaKHQuery = "SELECT COUNT(*) FROM KHACHHANG WHERE MaKH = @MaKH";
+                string checkMaKHQuery = "SELECT COUNT(*) FROM KHACHHANG WHERE SDT = @soDienThoai";
                 using (SqlCommand checkCmd = new SqlCommand(checkMaKHQuery, connection))
                 {
-                    checkCmd.Parameters.AddWithValue("@MaKH", maKH);
+                    checkCmd.Parameters.AddWithValue("@soDienThoai", soDienThoai);
                     int count = (int)checkCmd.ExecuteScalar();
 
                     // Nếu mã khách hàng không tồn tại, yêu cầu nhập địa chỉ
@@ -680,6 +746,16 @@ namespace BTLBinh
             tenNhanVien = "Chưa đăng nhập";
         }
 
+        private bool IsValidPhoneNumber(string phoneNumber)
+        {
+            // Kiểm tra độ dài là 10 và chỉ chứa số
+            if (phoneNumber.Length == 10 && phoneNumber.All(char.IsDigit))
+            {
+                return true;
+            }
+
+            return false;
+        }
 
 
         //------------------------------------------------------------------------------------------
@@ -998,8 +1074,8 @@ namespace BTLBinh
 
         private void dgv_hoaDon_CellEndEdit_1(object sender, DataGridViewCellEventArgs e)
         {
-            // Kiểm tra xem người dùng vừa hoàn thành chỉnh sửa cột "Tên sản phẩm" (giả sử, cột thứ 0)
-            if (e.ColumnIndex == 0 || e.ColumnIndex == 1 || e.ColumnIndex == 3) // Nếu là cột "Sản phẩm", "Số lượng" hoặc "Khuyến mãi"
+            // Kiểm tra xem người dùng vừa hoàn thành chỉnh sửa cột "Tên sản phẩm", "Số lượng", hoặc "Khuyến mãi"
+            if (e.ColumnIndex == 0 || e.ColumnIndex == 1 || e.ColumnIndex == 3)
             {
                 string tenSP = dgv_hoaDon.Rows[e.RowIndex].Cells[0].Value?.ToString();
                 int soLuong = 0;
@@ -1014,17 +1090,33 @@ namespace BTLBinh
                 // Lấy số lượng từ cột "Số lượng" (cột thứ 1)
                 if (int.TryParse(dgv_hoaDon.Rows[e.RowIndex].Cells[1].Value?.ToString(), out soLuong))
                 {
+                    // Kiểm tra xem số lượng có vượt quá số lượng trong kho không
+                    int availableQuantity = GetAvailableProductQuantity(tenSP); // Hàm lấy số lượng sản phẩm còn lại
+                    if (soLuong > availableQuantity)
+                    {
+                        // Nếu số lượng nhập vào lớn hơn số lượng trong kho, thông báo và không cập nhật giá trị
+                        MessageBox.Show($"Sản phẩm '{tenSP}' không đủ số lượng. Số lượng còn lại: {availableQuantity}");
+                        dgv_hoaDon.Rows[e.RowIndex].Cells[1].Value = availableQuantity; // Đặt số lượng về số còn lại
+                        return; // Dừng lại không thực hiện tính toán
+                    }
+
                     // Tính thành tiền = Số lượng * Giá
                     decimal thanhTien = gia * soLuong;
 
                     // Cập nhật ô "Thành tiền" (cột thứ 2)
                     dgv_hoaDon.Rows[e.RowIndex].Cells[2].Value = thanhTien;
-                }
 
-                // Gọi hàm tính tổng tiền sau khi cập nhật "Thành tiền"
-                CalculateTotalAmount();
+                    // Gọi hàm tính tổng tiền sau khi cập nhật "Thành tiền"
+                    CalculateTotalAmount();
+                }
+                else
+                {
+                    // Nếu số lượng không hợp lệ, hiển thị thông báo
+                    MessageBox.Show("Số lượng sản phẩm không hợp lệ!");
+                }
             }
         }
+
 
         private void btXoa_Click(object sender, EventArgs e)
         {
@@ -1066,9 +1158,14 @@ namespace BTLBinh
                 MessageBox.Show("Mã nhân viên chưa được nhập", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            else if (txtMaKhachHang.Text == "")
+            else if (txtSoDienThoai.Text == "")
             {
-                MessageBox.Show("Mã khách hàng chưa được nhập", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Số điện thoại chưa được nhập", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (!IsValidPhoneNumber(txtSoDienThoai.Text))
+            {
+                MessageBox.Show("Số điện thoại nhập không hợp lệ", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -1109,8 +1206,8 @@ namespace BTLBinh
                     {
                         // Xử lý thanh toán bằng tiền mặt ở đây
                         // Kiểm tra mã khách hàng và lấy địa chỉ nếu cần
-                        string maKH = txtMaKhachHang.Text;
-                        string diaChiKH = kiemTraKhachHang(maKH);
+                        string soDienThoai = txtSoDienThoai.Text;
+                        string diaChiKH = kiemTraKhachHang(soDienThoai);
                         if (diaChiKH == null) return;  // Nếu địa chỉ không hợp lệ thì dừng phương thức
 
                         // Tiến hành xử lý thanh toán tiền mặt 
@@ -1121,8 +1218,8 @@ namespace BTLBinh
                     else if (selectedPaymentMethod == "Chuyển khoản")
                     {
                         // Kiểm tra mã khách hàng và lấy địa chỉ nếu cần
-                        string maKH = txtMaKhachHang.Text;
-                        string diaChiKH = kiemTraKhachHang(maKH);
+                        string soDienThoai = txtSoDienThoai.Text;
+                        string diaChiKH = kiemTraKhachHang(soDienThoai);
                         if (diaChiKH == null) return;  // Nếu địa chỉ không hợp lệ thì dừng phương thức
 
                         // Tiến hành xử lý thanh toán chuyển khoản
